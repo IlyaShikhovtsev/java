@@ -1,5 +1,7 @@
 package ru.shikhovtsev.javathreadprogramming.chapter13threadpooling;
 
+import ru.shikhovtsev.javathreadprogramming.chapter18.ObjectFIFO;
+
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class ThreadPool {
@@ -121,7 +123,7 @@ public class ThreadPool {
       internalThread.interrupt();
     }
 
-    public boolean inAlive() {
+    public boolean isAlive() {
       return internalThread.isAlive();
     }
   }

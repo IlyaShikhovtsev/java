@@ -2,7 +2,7 @@ package ru.shikhovtsev.javathreadprogramming.chapter18;
 
 import java.beans.IntrospectionException;
 
-public class ObjectFIFO {
+public class ObjectFIFO<T> {
   private Object[] queue;
   private int capacity;
   private int size;
@@ -21,7 +21,7 @@ public class ObjectFIFO {
     return capacity;
   }
 
-  public synchronized  int getSize() {
+  public synchronized int getSize() {
     return size;
   }
 
@@ -33,8 +33,7 @@ public class ObjectFIFO {
     return (size == capacity);
   }
 
-  public synchronized void add(Object obj) throws InterruptedException {
-
+  public synchronized void add(T obj) throws InterruptedException {
     waitWhileFull();
 
     queue[head] = obj;
@@ -44,15 +43,82 @@ public class ObjectFIFO {
     notifyAll();
   }
 
-  public synchronized void addEach(Object[] list) throws InterruptedException {
+  public synchronized void addEach(T[] list) throws InterruptedException {
     for (int i = 0; i < list.length; i++) {
       add(list[i]);
     }
   }
 
-  public synchronized Object remove() throws InterruptedException {
+  public synchronized T remove() throws InterruptedException {
     waitWhileEmpty();
 
     Object obj = queue[tail];
+    queue[tail] = null;
+
+    tail = (tail + 1) % capacity;
+    size--;
+
+    notifyAll();
+
+    return (T) obj;
+  }
+
+  public synchronized Object[] removeAll() throws InterruptedException {
+    Object[] list = new Object[size];
+
+    for (int i = 0; i < list.length; i++) {
+      list[i] = remove();
+    }
+    return list;
+  }
+
+  public synchronized Object[] removeAtLeastOne() throws InterruptedException {
+    waitWhileEmpty();
+
+    return removeAll();
+  }
+
+  public synchronized boolean waitUntilEmpty(long msTimeout) throws InterruptedException {
+    if (msTimeout == 0L) {
+      waitWhileEmpty();
+      return true;
+    }
+
+    long endTime = System.currentTimeMillis() + msTimeout;
+    long msRemaining = msTimeout;
+
+    while (!isEmpty() && (msRemaining > 0L)) {
+      wait(msRemaining);
+      msRemaining = endTime - System.currentTimeMillis();
+    }
+    return isEmpty();
+  }
+
+  public synchronized void waitUntilEmpty() throws InterruptedException {
+    while(!isEmpty()) {
+      wait();
+    }
+  }
+
+  public synchronized void waitWhileEmpty() throws InterruptedException {
+    while(isEmpty()) {
+      wait();
+    }
+  }
+
+  private void waitUntilFull() throws InterruptedException {
+    while(!isFull()) {
+      wait();
+    }
+  }
+
+  public synchronized void waitWhileFull() throws InterruptedException {
+    while (isFull()) {
+      wait();
+    }
+  }
+
+  public boolean isAlive() {
+    return true;
   }
 }
