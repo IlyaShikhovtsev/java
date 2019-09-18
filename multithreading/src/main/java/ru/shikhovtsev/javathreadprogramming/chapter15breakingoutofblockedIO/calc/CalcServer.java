@@ -51,7 +51,7 @@ public class CalcServer {
     }
 
     System.out.println("in CalcServer - putting in a stop request to all the workers");
-    Iterator<CalcWorkerk> iter = workerList.iterator();
+    Iterator<CalcWorker> iter = workerList.iterator();
     while (iter.hasNext()) {
       CalcWorker worker = iter.next();
       worker.stopRequest();
