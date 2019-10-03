@@ -1,5 +1,6 @@
 package ru.shikhovtsev.javathreadprogramming.chapter15breakingoutofblockedIO;
 
+import ru.shikhovtsev.javathreadprogramming.chapter16surestop.SureStop;
 import ru.shikhovtsev.javathreadprogramming.chapter18.ByteFIFO;
 
 import java.io.FilterInputStream;
