@@ -14,6 +14,7 @@
     <module>multithreading</module>
     <module>collections</module>
     <module>timus</module>
+    <module>mbeans</module>
   </modules>
 
   <properties>
