@@ -15,6 +15,9 @@
     <module>collections</module>
     <module>timus</module>
     <module>mbeans</module>
+    <module>everything</module>
+    <module>web</module>
+    <module>web2</module>
   </modules>
 
   <properties>
